@@ -1,4 +1,3 @@
-# RushHour_IntroToAI_Project01
 Cách chạy chương trình:
 1. Cài đặt Python 3.8+ và Pygame: `pip install -r requirements.txt`
 2. Chạy `main.py`: `python main.py`
