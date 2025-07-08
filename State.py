@@ -1,5 +1,5 @@
 from typing import List, Tuple, Dict
-from Vehicle import Vehicle
+from Vehicle import Vehicle, max
 
 class State:
     def __init__(self, vehicles: Dict[int, Vehicle], moves: List[Tuple[int, int]] = None, cost: int = 0):
@@ -10,19 +10,18 @@ class State:
         self._validate_positions()
 
     def _validate_positions(self):
-        """Ensure all vehicles are within board boundaries"""
         for vid, vehicle in self.vehicles.items():
             if vehicle.dir == "h":
                 if (vehicle.pos[0] < 0 or 
-                    vehicle.pos[0] >= 6 or  # Only row index check
+                    vehicle.pos[0] + vehicle.len > max + 1 or
                     vehicle.pos[1] < 0 or 
-                    vehicle.pos[1] + vehicle.len > 6):  # Column boundary check
+                    vehicle.pos[1] > max):
                     raise ValueError(f"Vehicle {vid} out of bounds: {vehicle.pos}")
-            else:  # vertical
-                if (vehicle.pos[1] < 0 or 
-                    vehicle.pos[1] >= 6 or  # Only column index check
-                    vehicle.pos[0] < 0 or 
-                    vehicle.pos[0] + vehicle.len > 6):  # Row boundary check
+            else:
+                if (vehicle.pos[0] < 0 or 
+                    vehicle.pos[0] > max or
+                    vehicle.pos[1] < 0 or 
+                    vehicle.pos[1] + vehicle.len > max + 1):
                     raise ValueError(f"Vehicle {vid} out of bounds: {vehicle.pos}")
 
     def __eq__(self, other):

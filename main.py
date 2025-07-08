@@ -1,5 +1,5 @@
 import pygame
-from Board import Board
+from Board import Board, scaleBase
 from Button import Button
 from Search import SearchAlgorithms
 from State import State
@@ -16,18 +16,17 @@ stageBg =  pygame.transform.scale(pygame.image.load("./Asset/Background/stageBG.
 bg =  pygame.transform.scale(pygame.image.load("./Asset/Background/BG.png"), (w, h))
 
 offset = 120
-scaleBase = 120
 font = pygame.font.Font("./Asset/PRESSSTART2P.TTF", 28)
 
 # Game buttons
-bPlay = pygame.transform.scale(pygame.image.load("./Asset/Button/Play.png"), (120, 120))
-bDown = pygame.transform.scale(pygame.image.load("./Asset/Button/Down.png"), (84, 84))
-bUp = pygame.transform.scale(pygame.image.load("./Asset/Button/Up.png"), (84, 84))
-bReturn = pygame.transform.scale(pygame.image.load("./Asset/Button/Return.png"), (120, 120))
-bChange = pygame.transform.scale(pygame.image.load("./Asset/Button/Change.png"), (120, 120))
-bPause = pygame.transform.scale(pygame.image.load("./Asset/Button/Pause.png"), (120, 120))
-bReset = pygame.transform.scale(pygame.image.load("./Asset/Button/Reset.png"), (120, 120))
-bExit = pygame.transform.scale(pygame.image.load("./Asset/Button/Exit.png"), (120, 120))
+bPlay = pygame.transform.scale(pygame.image.load("./Asset/Button/Play.png"), (scaleBase, scaleBase))
+bDown = pygame.transform.scale(pygame.image.load("./Asset/Button/Down.png"), (scaleBase * 0.7, scaleBase * 0.7))
+bUp = pygame.transform.scale(pygame.image.load("./Asset/Button/Up.png"), (scaleBase * 0.7, scaleBase * 0.7))
+bReturn = pygame.transform.scale(pygame.image.load("./Asset/Button/Return.png"), (scaleBase, scaleBase))
+bChange = pygame.transform.scale(pygame.image.load("./Asset/Button/Change.png"), (scaleBase, scaleBase))
+bPause = pygame.transform.scale(pygame.image.load("./Asset/Button/Pause.png"), (scaleBase, scaleBase))
+bReset = pygame.transform.scale(pygame.image.load("./Asset/Button/Reset.png"), (scaleBase, scaleBase))
+bExit = pygame.transform.scale(pygame.image.load("./Asset/Button/Exit.png"), (scaleBase, scaleBase))
 
 def mainMenu():
     pygame.display.set_caption("Main Menu")
@@ -112,6 +111,7 @@ def stageOptions(level, algo):
 
 def play(level, algo):
     pygame.display.set_caption("Play")
+    screen.fill("black")
     screen.blit(stageBg, (0, 0))
     pygame.display.flip()
 
@@ -121,10 +121,12 @@ def play(level, algo):
     
     search = SearchAlgorithms(board)
     
-    algo_map = {"BFS": search.bfs,
-                "DFS": lambda: search.dfs(max_depth=50),
-                "UCS": search.ucs,
-                "A*": search.a_star}
+    algo_map = {
+        "BFS": search.bfs,
+        "DFS": lambda: search.dfs(max_depth=50),
+        "UCS": search.ucs,
+        "A*": search.a_star
+    }
     
     paused = False
     steps = 0
@@ -167,7 +169,7 @@ def play(level, algo):
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if Change.checkForInput(mouse):
-                    return stageOptions(level, algo)
+                    return True
                 elif Pause.checkForInput(mouse):
                     paused = not paused
                 elif Reset.checkForInput(mouse):
@@ -175,11 +177,11 @@ def play(level, algo):
                     steps = 0
                     move_index = 0
                     last_move_time = current_time
+                    paused = False
                 elif Exit.checkForInput(mouse):
-                    return True
+                    return False
 
         screen.blit(stageBg, (0, 0))
-
         for vid, vehicle in board.vehicles.items():
             pos = (offset + vehicle.pos[0] * scaleBase, 
                    offset + vehicle.pos[1] * scaleBase)
@@ -197,7 +199,7 @@ def play(level, algo):
         screen.blit(bSteps, (w / 2 - bSteps.get_width()/2, 900))
         screen.blit(bAlgo, (w * 5/6 - bAlgo.get_width()/2, 900))
 
-        # Show searching messages
+        # Searching
         if not solution_found and not no_solution:
             loading_text = font.render("Searching...", True, "black")
             screen.blit(loading_text, (w/2 - loading_text.get_width()/2, h/2))
@@ -206,7 +208,7 @@ def play(level, algo):
             screen.blit(error_text, (w/2 - error_text.get_width()/2, h/2))
             paused = True
 
-        # Execute solution moves
+        # Move
         if solution_found and path and not paused and move_index < len(path):
             if current_time - last_move_time >= move_delay:
                 vehicle_id, direction = path[move_index]
@@ -229,8 +231,7 @@ def play(level, algo):
                 win_text = font.render("You Win!", True, "green")
                 screen.blit(win_text, (w/2 - win_text.get_width()/2, h/2))
                 pygame.display.flip()
-                pygame.time.wait(3000)
-                return True
+                paused = True
 
         pygame.display.flip()
         clock.tick(60)
