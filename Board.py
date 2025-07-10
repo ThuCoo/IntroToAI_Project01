@@ -243,7 +243,7 @@ class Board:
                 new_vehicles[vid].len = vehicle.len
         
         new_moves = state.moves + [move]
-        new_cost = state.cost + 1
+        new_cost = state.cost + abs(step) * vehicle.len
         return State(new_vehicles, new_moves, new_cost)
 
     def heuristic(self, state):

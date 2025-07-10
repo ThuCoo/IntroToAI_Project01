@@ -14,6 +14,7 @@ h = 960
 screen = pygame.display.set_mode((w, h))
 stageBg =  pygame.transform.scale(pygame.image.load("./Asset/Background/stageBG.png"), (w, h))
 bg =  pygame.transform.scale(pygame.image.load("./Asset/Background/BG.png"), (w, h))
+win = pygame.transform.scale(pygame.image.load("./Asset/Background/Win.png"), (720, 480))
 
 offset = 120
 font = pygame.font.Font("./Asset/PRESSSTART2P.TTF", 28)
@@ -113,12 +114,33 @@ def play(level, algo):
     pygame.display.set_caption("Play")
     screen.fill("black")
     screen.blit(stageBg, (0, 0))
-    pygame.display.flip()
 
     board = Board()
     board.level = level - 1
     board.stagePrep()
     
+    screen.blit(stageBg, (0, 0))
+    for vid, vehicle in board.vehicles.items():
+        pos = (offset + vehicle.pos[0] * scaleBase, 
+                offset + vehicle.pos[1] * scaleBase)
+        screen.blit(vehicle.img, pos)
+
+    Change = Button(bChange, (540, 60))
+    Pause = Button(bPause, (660, 60))
+    Reset = Button(bReset, (780, 60))
+    Exit = Button(bExit, (900, 60))
+    Change.update(screen)
+    Pause.update(screen)
+    Reset.update(screen)
+    Exit.update(screen)
+    bLvl = font.render(f'LEVEL: {level}', True, "black")
+    bSteps = font.render(f'STEPS: 0', True, "black")
+    bAlgo = font.render(f'ALGO: {algo}', True, "black")
+    screen.blit(bLvl, (w / 6 - bLvl.get_width()/2, 900))
+    screen.blit(bSteps, (w / 2 - bSteps.get_width()/2, 900))
+    screen.blit(bAlgo, (w * 5/6 - bAlgo.get_width()/2, 900))
+    pygame.display.flip()
+
     search = SearchAlgorithms(board)
     
     algo_map = {
@@ -136,11 +158,7 @@ def play(level, algo):
     no_solution = False
     last_move_time = time.time()
     move_delay = 0.3
-
-    Change = Button(bChange, (540, 60))
-    Pause = Button(bPause, (660, 60))
-    Reset = Button(bReset, (780, 60))
-    Exit = Button(bExit, (900, 60))
+    total_cost = 0
 
     clock = pygame.time.Clock()
     running = True
@@ -217,6 +235,7 @@ def play(level, algo):
                         steps += 1
                         move_index += 1
                         last_move_time = current_time
+                        total_cost += abs(direction) * board.vehicles[vehicle_id].len
                     else:
                         print(f"Invalid move: {vehicle_id}, {direction}")
                         no_solution = True
@@ -228,8 +247,14 @@ def play(level, algo):
         if solution_found and path and move_index >= len(path):
             current_state = State(board.vehicles.copy())
             if board.is_goal(current_state):
-                win_text = font.render("You Win!", True, "green")
-                screen.blit(win_text, (w/2 - win_text.get_width()/2, h/2))
+                screen.blit(win, (offset, 2 * offset))
+                win_text = font.render("YOU WIN !", True, (91, 73, 73))
+                screen.blit(win_text, (w / 2 - win_text.get_width() / 2, 2 * offset + win_text.get_height()))
+                screen.blit(bLvl, (w / 3 - bLvl.get_width() / 2,  2.5 * offset + win_text.get_height()))
+                screen.blit(bSteps, (w / 3 - bSteps.get_width() / 2,  3 * offset + win_text.get_height()))
+                screen.blit(bAlgo, (w * 2 / 3 - bAlgo.get_width() / 2,  2.5 * offset + win_text.get_height()))
+                bCost = font.render(f'COST: {total_cost}', True, "black")
+                screen.blit(bCost, (w * 2 / 3 - bCost.get_width() / 2,  3 * offset + win_text.get_height()))
                 pygame.display.flip()
                 paused = True
 
