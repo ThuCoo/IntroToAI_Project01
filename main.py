@@ -191,7 +191,7 @@ def play(level, algo):
                 elif Pause.checkForInput(mouse):
                     paused = not paused
                 elif Reset.checkForInput(mouse):
-                    board.stagePrep()
+                    board.resetStage()
                     steps = 0
                     move_index = 0
                     last_move_time = current_time

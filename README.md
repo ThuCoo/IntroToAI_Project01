@@ -1,1 +1,11 @@
-# IntroToAI_Project01
+Cách chạy chương trình:
+1. Cài đặt Python 3.8+ và Pygame: `pip install -r requirements.txt`
+2. Chạy `main.py`: `python main.py`
+3. Giao diện Pygame:
+   - Nhấn các nút BFS/DFS/UCS/A* để chọn thuật toán.
+   - Nhấn Play/Pause để xem giải pháp từng bước.
+   - Nhấn Reset để quay lại trạng thái ban đầu.
+   - Thống kê hiển thị: số bước, chi phí.
+4. Định dạng file map:
+   - Dòng 1 -> 10: Các xe khác nhau ngăn cách nhau bởi dấu cách, xe được định dạng bởi kind, pos, dir, id.
+5. Xe mục tiêu màu đỏ, các xe khác có màu khác nhau, cổng ra màu vàng.

@@ -56,6 +56,17 @@ class Board:
         for c in cur:
             self.pushVehicle(Vehicle(c[0], [c[1], c[2]], c[3]))
 
+    def resetStage(self):
+        self.clearGrid()
+        for i, c in enumerate(self.stage[self.level], start=1):
+            vehicle = self.vehicles[i]
+            vehicle.pos = [c[1], c[2]]
+            for j in range(vehicle.len):
+                if vehicle.dir == "h":
+                    self.grid[vehicle.pos[0]][vehicle.pos[1] + j] = vehicle.id
+                else:
+                    self.grid[vehicle.pos[0] + j][vehicle.pos[1]] = vehicle.id
+
     def __init__(self, row=6, col=6):
         self.row = row
         self.col = col

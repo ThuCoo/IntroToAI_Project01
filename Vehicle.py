@@ -38,7 +38,7 @@ class Vehicle:
         else:
             raise Exception(kind, "is not correct type.")
         self.img = pygame.image.load(self.imgName)
-        # if self.kind != "x" : self.img = randomColor(self.img)
+        if self.kind != "x" : self.img = randomColor(self.img)
         self.img = pygame.transform.scale(self.img, (self.len * scaleBase, scaleBase))
 
         self.id = id

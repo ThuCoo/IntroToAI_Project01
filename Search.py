@@ -107,34 +107,32 @@ class SearchAlgorithms:
         tracemalloc.start()
         start_time = time.time()
         self.expanded_nodes = 0
-        visited = set()
         initial_state = State(self.board.vehicles.copy())
         initial_state.heuristic = self.board.heuristic(initial_state)
-        pq = [(initial_state.cost + initial_state.heuristic, initial_state)]  # (f_score, state)
-        heapq.heapify(pq)
+        pq = [(initial_state.heuristic, initial_state)]  # (f_score, state)
         g_scores = {initial_state: 0}
+        visited = set()
 
         while pq:
             f_score, state = heapq.heappop(pq)
-            self.expanded_nodes += 1
-
             if self.board.is_goal(state):
                 self.search_time = time.time() - start_time
                 _, peak_memory = tracemalloc.get_traced_memory()
                 tracemalloc.stop()
                 return state, self.expanded_nodes, self.search_time, peak_memory
 
-            if state not in visited:
-                visited.add(state)
-                for move in self.board.get_valid_moves(state):
-                    new_state = self.board.apply_move(state, move)
-                    new_state.heuristic = self.board.heuristic(new_state)
-                    g_score = g_scores[state] + 1
-                    
-                    if new_state not in g_scores or g_score < g_scores[new_state]:
-                        g_scores[new_state] = g_score
-                        f_score = g_score + new_state.heuristic
-                        heapq.heappush(pq, (f_score, new_state))
+            if state in visited:
+                continue
+            visited.add(state)
+            self.expanded_nodes += 1
+
+            for move in self.board.get_valid_moves(state):
+                new_state = self.board.apply_move(state, move)
+                new_state.heuristic = self.board.heuristic(new_state)
+                if new_state not in g_scores or new_state.cost < g_scores[new_state]:
+                    g_scores[new_state] = new_state.cost
+                    f_score = new_state.cost + new_state.heuristic
+                    heapq.heappush(pq, (f_score, new_state))
 
         self.search_time = time.time() - start_time
         _, peak_memory = tracemalloc.get_traced_memory()
