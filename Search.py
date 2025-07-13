@@ -44,7 +44,7 @@ class SearchAlgorithms:
         tracemalloc.stop()
         return None, self.expanded_nodes, self.search_time, peak_memory
 
-    def dfs(self, max_depth: int = 100) -> Tuple[Optional[State], int, float, int]:
+    def dfs(self, max_depth: int = 50) -> Tuple[Optional[State], int, float, int]:
         tracemalloc.start()
         start_time = time.time()
         self.expanded_nodes = 0

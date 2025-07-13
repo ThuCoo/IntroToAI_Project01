@@ -9,6 +9,8 @@ pygame.init()
 pygame.display.init()
 pygame.font.init()
 
+pygame.mixer.music.load("./Asset/bgMusic.mp3")
+
 w = 960
 h = 960
 screen = pygame.display.set_mode((w, h))
@@ -271,6 +273,8 @@ def play(level, algo):
     return False
 
 def main():
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.5)
     if not mainMenu():
         pygame.quit()
 
