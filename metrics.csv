@@ -1,0 +1,51 @@
+Search time, memory usage, and expanded nodes
+Level 1
+BFS: 24.221296310424805, 21136, 11
+DFS: 18.850666761398315, 13816, 21
+UCS: 25.442688465118408, 14112, 14
+A*: 24.3986599445343, 18576, 10
+Level 2
+BFS:
+DFS:
+UCS:
+A*:
+Level 3
+BFS:
+DFS:
+UCS:
+A*:
+Level 4
+BFS:
+DFS:
+UCS:
+A*:
+Level 5
+BFS:
+DFS:
+UCS:
+A*:
+Level 6
+BFS:
+DFS:
+UCS:
+A*:
+Level 7
+BFS:
+DFS:
+UCS:
+A*:
+Level 8
+BFS:
+DFS:
+UCS:
+A*:
+Level 9
+BFS:
+DFS:
+UCS:
+A*:
+Level 10
+BFS:
+DFS:
+UCS:
+A*:
