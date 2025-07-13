@@ -63,9 +63,9 @@ class Board:
             vehicle.pos = [c[1], c[2]]
             for j in range(vehicle.len):
                 if vehicle.dir == "h":
-                    self.grid[vehicle.pos[0]][vehicle.pos[1] + j] = vehicle.id
-                else:
                     self.grid[vehicle.pos[0] + j][vehicle.pos[1]] = vehicle.id
+                else:
+                    self.grid[vehicle.pos[0]][vehicle.pos[1] + j] = vehicle.id
 
     def __init__(self, row=6, col=6):
         self.row = row
