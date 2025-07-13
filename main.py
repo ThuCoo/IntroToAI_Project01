@@ -167,8 +167,14 @@ def play(level, algo):
         search_result = algo_map[algo]()
         if search_result and search_result[0]:
             path = search_result[0].moves
+            expanded_nodes = search_result[1]
+            search_time = search_result[2]
+            memory_used = search_result[3]
             solution_found = True
             print(f"Solution found in {len(path)} moves")
+            print(f"Expanded nodes: {expanded_nodes}")
+            print(f"Search time: {search_time} s")
+            print(f"Memory used: {memory_used} KB")
         else:
             no_solution = True
             print("No solution found")
